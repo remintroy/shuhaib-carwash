@@ -4,28 +4,28 @@ const pendingListSchema=mongoose.Schema({
     contractNo:{
         type:Number,
         required:true,
-        unique:true
+       
     },
     mobile:{
         type:Number,
-        required:true
+        
     },
     building:{
         type:String,
 
     },
     plateNo:{
-        type:Number
+        type:String
     },
     flatNo:{
-        type:Number
+        type:String
     },
     lotNo:{
-        type:Number
+        type:String
     
     },
     VAT:{
-        type:Number
+        type:String
     },
     renewalDate:{
         type:Date
@@ -48,7 +48,7 @@ thr:{
 fri:{
     type:String
 },
-Status:{
+status:{
    type:String
 },
 pem:{
@@ -63,4 +63,4 @@ site:{
 }
 })
 
-module.exports=mongoose.model('Admin',pendingListSchema)
+module.exports=mongoose.model('PendingList',pendingListSchema)

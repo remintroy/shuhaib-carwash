@@ -1,7 +1,16 @@
-import React from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import React,{useState,useEffect} from 'react'
+import { Link } from 'react-router-dom'
+import { getPendingList } from '../helpers/adminHelpers'
 
 function PendingList() {
+  const [List,setList]= useState([])
+  useEffect(()=>{
+    console.log('calling');
+    getPendingList().then((data)=>{
+      console.log(data?.data?.data,'llistss');
+      setList(data?.data?.data)
+    })
+  },[])
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-4">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
@@ -87,7 +96,12 @@ function PendingList() {
                       >
                         Contract Status
                       </th>
-
+                      <th
+                        scope="col"
+                        className="px-4 py-3.5 text-left text-sm font-normal text-gray-500"
+                      >
+                     Cleaner Now
+                      </th>
                       <th
                         scope="col"
                         className="px-4 py-3.5 text-left text-sm font-normal text-gray-500"
@@ -99,6 +113,18 @@ function PendingList() {
                       </th>
                     </tr>
                   </thead>
+
+                  {
+                    List?.map((lists)=>{
+                      const date = new Date(lists.renewalDate);
+
+                      const year = date.getFullYear();
+                      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                      const day = date.getDate().toString().padStart(2, '0');
+                      
+                      const formattedDate = `${day}-${month}-${year}`;
+                      return(
+                    
                   <tbody className="divide-y divide-gray-200 bg-white">
                   
                       <tr key='' className="divide-x divide-gray-200">
@@ -106,57 +132,81 @@ function PendingList() {
                           <div className="flex items-center">
                            
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">djfkfd</div>
+                              <div className="text-sm font-medium text-gray-900">{lists?.contractNo}</div>
                              
                             </div>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{lists?.mobile}</div>
                           
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900"> {lists?.building} </div>
                           
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{lists?.plateNo}</div>
                           
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{lists?.flatNo}</div>
                           
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{lists.lotNo}</div>
                           
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{lists?.VAT}</div>
                           
                         </td>
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{formattedDate}</div>
                           
                         </td>
-                      
+                      {
+                        lists?.status==='renewed'?
                         <td className="whitespace-nowrap px-4 py-4">
                           <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                            Renewed
+                            {lists?.status}
                           </span>
-                        </td>
+                        </td>:
+                        <td className="whitespace-nowrap px-4 py-4">
+                        <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800">
+                          {lists?.status}
+                        </span>
+                      </td>
+                      }
                         <td className="whitespace-nowrap px-12 py-4">
-                          <div className="text-sm text-gray-900">djd</div>
+                          <div className="text-sm text-gray-900">{lists?.cleaner}</div>
                           
                         </td>
-                        <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-                          <Link to={'/edit'} href="#" className="text-gray-500 hover:text-indigo-600">
-                            Edit
-                          </Link>
+                        <td className="whitespace-nowrap px-12 py-4">
+                          <div className="text-sm text-gray-900">{lists?.site}</div>
+                          
                         </td>
+
+                        {
+                          lists.status==='renewed'?
+                        <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+                          <button to={`/edit/${lists._id}`}   className=" text-gray-500" disabled >
+                            Edit
+                          </button>
+                        </td>:
+                        <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+                        <Link to={`/edit/${lists._id}`}  className="text-gray-500 hover:text-indigo-600">
+                          Edit
+                        </Link>
+                      </td>
+                        }
                       </tr>
                     
                   </tbody>
+                      
+                      )
+                    })
+                  }
                 </table>
               </div>
             </div>

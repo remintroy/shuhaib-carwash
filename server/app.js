@@ -14,7 +14,7 @@ app.use(cors({
     credentials: true,
     methods: ["GET", "POST"],
     origin: true,
-    origin: ["http://127.0.0.1:5173", "https://shuhaib.live"],
+    origin: ["http://localhost:5173"],
 }))
 
 app.use(cookieParser())
