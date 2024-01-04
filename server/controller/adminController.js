@@ -2,6 +2,8 @@ const PendingList= require('../model/pendingListModel')
 const RenewedList = require('../model/renewedList')
 const ExcelJS = require('exceljs');
 
+
+
 exports.addPendingList=async(req,res)=>{
     try {
 const {contractNo,mobile,building,plateNo,flatNo,VAT,renewalDate,
@@ -138,9 +140,6 @@ exports.downloadReneiwedData = async(req,res)=>{
 async function exportToExcelAndSendResponse(data, res) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sheet 1');
-  
-    // Assuming data is an array of objects
-    // You may need to customize this based on your schema
     worksheet.columns = [
       { header: 'Contract No', key: 'contractNo', width: 15 },
       { header: 'Plate No ', key: 'plateNo', width: 15 },
@@ -153,14 +152,8 @@ async function exportToExcelAndSendResponse(data, res) {
       { header: 'Site ', key: 'site', width: 15 },
       { header: 'Payment methord ', key: 'PaymentMethord', width: 15 },
 
-
-
-
-
-      // Add more columns as needed
     ];
   
-    // Insert data into the worksheet
     data.forEach((item) => {
         console.log(item,'ietmss');
       worksheet.addRow({
@@ -175,24 +168,74 @@ async function exportToExcelAndSendResponse(data, res) {
         site: item.site,
         PaymentMethord : item.paymentMethod,
 
-        
-
-
-
-
-        // Add more fields as needed
       });
     });
   
-    // Set headers for the response
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename=output.xlsx');
   
-    // Write the workbook to the response stream
    await  workbook.xlsx.write(res);
   
-    // End the response
+   
     res.end();
+    
   
     console.log('Excel file sent successfully');
   }
+
+
+  //export Form Data
+
+  exports.exportFormData = async (req, res) => {
+    try {
+        console.log('calling ');
+   
+     if(req.file.buffer){
+        const result = await PendingList.deleteMany({});
+
+        console.log(`${result.deletedCount} documents deleted`);
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(req.file.buffer);
+
+        
+        const sheetNames = workbook.worksheets.map(ws => ws.name);
+
+        const worksheet = workbook.getWorksheet('Pending');
+        if (!worksheet) {
+            throw new Error("Worksheet 'Pending' not found in the workbook.");
+        }
+
+        const dataToImport = [];
+
+        worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+            if (rowNumber === 1) {
+                return;
+            }
+
+            const rowData = {
+                contractNo: row.getCell(1).value === 'CONTRACT NO' ? '' : row.getCell(1).value,
+                mobile: row.getCell(2).value === 'MOBILE ' ? '' : row.getCell(2).value,
+                building: row.getCell(3).value === 'BUILDING ' ? '' : row.getCell(3).value,
+                plateNo: row.getCell(4).value === 'PLATE NO ' ? '' : row.getCell(4).value,
+                flatNo: row.getCell(5).value === 'FLAT NO ' ? '' : row.getCell(5).value,
+                VAT: row.getCell(7).value === 'RATE OF MONTHLY CONTRACT INCLUDE VAT' ? '' : row.getCell(7).value,
+                renewalDate: row.getCell(8).value === 'RENEWAL DATE' ? '' : row.getCell(8).value,
+                status: row.getCell(15).value === 'CONTRACT STATUS' ? '' : row.getCell(15).value,
+                cleaner: row.getCell(17).value === 'CLEANER NOW' ? '' : row.getCell(17).value,
+                site: row.getCell(18).value === 'SITE ' ? '' : row.getCell(18).value,
+            };
+            dataToImport.push(rowData);
+        });
+
+        await PendingList.insertMany(dataToImport);
+
+        res.status(200).json({ message: 'File uploaded and data imported successfully' });
+     }else{
+        console.log('something went wrong');
+     }
+
+    } catch (error) {
+        console.error('Error processing file:', error.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

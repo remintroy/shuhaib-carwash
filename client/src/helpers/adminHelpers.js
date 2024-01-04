@@ -93,3 +93,18 @@ export async function downloadData(){
         })
     })
 }
+//exportList
+
+export async function exportList(data){
+    console.log('Form Data Content:');
+    for (let pair of data.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
+    return new Promise((resolve,reject)=>{
+        adminApi.post('/exportList',data,{
+            headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+        }) 
+    })
+}

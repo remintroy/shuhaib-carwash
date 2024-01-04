@@ -1,8 +1,21 @@
 import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom'
-import { getPendingList } from '../helpers/adminHelpers'
+import { getPendingList,exportList } from '../helpers/adminHelpers'
 
 function PendingList() {
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+  console.log(file,'file');
+
+
+  
+  const formData = new FormData();
+  formData.append('excelFile', file);
+
+ 
+
   const [List,setList]= useState([])
   useEffect(()=>{
     console.log('calling');
@@ -21,11 +34,13 @@ function PendingList() {
             </p>
           </div>
           <div>
-            <Link to={'/pendingForm'}
+          <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+            <Link 
+            onClick={()=>{exportList(formData)}}
               type="button"
               className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
             >
-             ADD NEW
+             Upload
             </Link>
           </div>
         </div>

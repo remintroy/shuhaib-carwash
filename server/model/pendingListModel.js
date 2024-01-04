@@ -2,12 +2,13 @@ const mongoose=require('mongoose')
 
 const pendingListSchema=mongoose.Schema({
     contractNo:{
-        type:Number,
+        type:String,
         required:true,
+        unique:false
        
     },
     mobile:{
-        type:Number,
+        type:String,
         
     },
     building:{
@@ -28,7 +29,7 @@ const pendingListSchema=mongoose.Schema({
         type:String
     },
     renewalDate:{
-        type:Date
+        type:String
     },
     sun:{
            type:String
