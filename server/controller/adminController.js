@@ -237,16 +237,9 @@ async function exportToExcelAndSendResponse(data, res) {
                 site: row.getCell(18).value === 'SITE ' ? '' : row.getCell(18).value,
             };
             dataToImport.push(rowData);
-            if(dataToImport){
-                PendingList.deleteMany({}, (err) => {
-                    if (err) {
-                      console.error(err);
-                    } else {
-                      console.log('All documents removed from the collection.');
-                    }
-                  });
-            }
         });
+        await PendingList.deleteMany({})
+        await RenewedList.deleteMany({})
 
         await PendingList.insertMany(dataToImport);
 
