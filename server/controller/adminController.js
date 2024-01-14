@@ -1,7 +1,11 @@
 const PendingList= require('../model/pendingListModel')
 const RenewedList = require('../model/renewedList')
 const ExcelJS = require('exceljs');
-
+const Admin = require('../model/admin')
+const Employee = require('../model/employee')
+const bcrypt = require('bcrypt')
+const userName =require('../config/adminDetail')
+const newPassword= require('../config/adminDetail')
 
 
 exports.addPendingList=async(req,res)=>{
@@ -39,23 +43,31 @@ addlist.save().then((result)=>{
         console.log(error,'nmaa error');
     }
 }
-
-exports.getAllLists= async (req,res)=>{
-    console.log('calling','back');
+const ITEMS_PER_PAGE = 10;
+exports.getAllLists = async (req, res) => {
+    console.log('calling', 'back');
     try {
-        const allPendingList = await PendingList.find({})
-      
-        if(allPendingList){
-            res.status(200).send({data:allPendingList})
-        }else{
-            console.log('eroro');
-        }
+      const currentPage = req.query.page || 1;
+      const pageSize = req.query.pageSize || ITEMS_PER_PAGE;
+  console.log(currentPage,'..currnt');
+      const skipItems = (currentPage - 1) * pageSize;
+  
+      const allPendingList = await PendingList.find({})
+        .skip(skipItems)
+        .limit(pageSize);
+  
+      const totalItems = await PendingList.countDocuments({});
+  console.log(totalItems,'totalitems');
+      if (allPendingList) {
+        res.status(200).send({ data: allPendingList, totalItems });
+      } else {
+        console.log('error');
+      }
     } catch (error) {
-        console.log(error,'namma error');
-        res.send(error.message)
+      console.log(error, 'namma error');
+      res.send(error.message);
     }
-}
-
+  };
 exports.editList = async(req,res)=>{
     try {
        const {id}=req.body
@@ -225,10 +237,20 @@ async function exportToExcelAndSendResponse(data, res) {
                 site: row.getCell(18).value === 'SITE ' ? '' : row.getCell(18).value,
             };
             dataToImport.push(rowData);
+            if(dataToImport){
+                PendingList.deleteMany({}, (err) => {
+                    if (err) {
+                      console.error(err);
+                    } else {
+                      console.log('All documents removed from the collection.');
+                    }
+                  });
+            }
         });
 
         await PendingList.insertMany(dataToImport);
 
+         
         res.status(200).json({ message: 'File uploaded and data imported successfully' });
      }else{
         console.log('something went wrong');
@@ -239,3 +261,132 @@ async function exportToExcelAndSendResponse(data, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+// login admin
+exports.loginAdmin=async(req,res)=>{
+    
+    console.log('calling login');
+    try {
+        const {email,password}= req.body
+    
+      if(password===newPassword){
+        const data = {
+            email: email,
+          
+          };
+          
+      console.log(data,'data');
+        res.status(200).send(data.email)
+      }else{
+        res.status(500).send({message:'invalid email or password'})
+      }
+    } catch (error) {
+       res.send(error) 
+    }
+}
+//add employee
+ exports.addEmployee= async (req,res)=>{
+    try {
+
+        console.log(req.body,'body');
+        const {name,site,password,} =req.body
+        const employee = await Employee.find({name})
+      console.log(employee,'dndndn');
+       if(employee.length===0){
+        bcrypt.hash(password,10,function(err,hash){
+            if(err){
+                res.status(500).send({msg:'err'})
+            }
+            const newEmp =new Employee({
+                name:name,
+                password:hash,
+                site:site
+            })
+            newEmp.save().then((data)=>{
+                console.log('data saved');
+
+            })
+        })
+        res.status(200).send({msg:'success '})
+       }else{
+        res.status(500).send({msg:'failed'})
+       }
+    } catch (error) {
+        res.send(error)
+    }
+ }
+
+ //getting getEmployeesList
+
+ exports.getEmployeesList = async (req,res)=>{
+    try {
+        const emp = await Employee.find({})
+        if(emp){
+            res.status(200).send(emp)
+        }
+    } catch (error) {
+       res.send(error) 
+    }
+ }
+
+ //login Employee
+ exports.loginEmp=async(req,res)=>{
+    try {
+        console.log(req.body,'bodyy');
+        const {username
+            ,password
+        } = req.body
+        const emp = await Employee.find({name:username})
+        console.log(emp,'emp');
+        if(emp.length!==0){
+
+            console.log(emp[0].password,'emp');
+            console.log('kfdlkjdkl');
+            const validateEmp=await bcrypt.compare(password,emp[0]?.password)
+            console.log(validateEmp,'kkj');
+                if(validateEmp){
+                    console.log('kayaa');
+                    const update= await Employee.updateOne({name:username},
+                        {
+                            $set:{
+                                isEmploye:true
+                            }
+                        })
+                       
+                    }
+                 console.log(emp[0].name);
+                    res.status(200).send({data:emp[0]?.name})
+
+        }
+
+    } catch (error) {
+        res.send(error)
+    }
+ }
+
+ exports.getEmpPendList =async(req,res)=>{
+    console.log(req.query,'queryy...');
+    try {
+        const currentPage = req.query.page || 1;
+        const pageSize = req.query.pageSize || ITEMS_PER_PAGE;
+        const data = req.query.data
+        console.log(data,'..dataa');
+    console.log(currentPage,'..currnt');
+        const skipItems = (currentPage - 1) * pageSize;
+    const site = await Employee.find({name:data})
+    const empSite = site[0]?.site
+   
+    console.log(empSite,'site ');
+        const allPendingList = await PendingList.find({site:empSite})
+          .skip(skipItems)
+          .limit(pageSize);
+        const totalItems = await PendingList.countDocuments({site:empSite});
+    console.log(totalItems,'totalitems');
+        if (allPendingList) {
+          res.status(200).send({ data: allPendingList, totalItems });
+        } else {
+          console.log('error');
+        }
+    } catch (error) {
+        
+    }
+ }

@@ -1,29 +1,43 @@
-import React,{useState,useEffect} from 'react'
-import { Link } from 'react-router-dom'
-import { getPendingList,exportList } from '../helpers/adminHelpers'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { getPendingList, exportList } from '../helpers/adminHelpers';
 
 function PendingList() {
+  const admin = sessionStorage.getItem('admin');
   const [file, setFile] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [List, setList] = useState([]);
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-  console.log(file,'file');
 
-
-  
   const formData = new FormData();
   formData.append('excelFile', file);
 
- 
+  const fetchPaginatedData = async () => {
+    try {
+      const data = await getPendingList(currentPage, pageSize);
+      console.log(data, 'data');
+      setList(data?.data);
+      setTotalPages(Math.ceil(data?.totalItems / pageSize));
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  };
+console.log(List,'namma lists front endd');
+  useEffect(() => {
+    fetchPaginatedData();
+  }, [currentPage, pageSize]);
 
-  const [List,setList]= useState([])
-  useEffect(()=>{
-    console.log('calling');
-    getPendingList().then((data)=>{
-      console.log(data?.data?.data,'llistss');
-      setList(data?.data?.data)
-    })
-  },[])
+  const handlePageChange = (newPage) => {
+    console.log('next',newPage);
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-4">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
@@ -33,8 +47,10 @@ function PendingList() {
        
             </p>
           </div>
-          <div>
           <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+          {
+            file?
+          <div>
             <Link 
             onClick={()=>{exportList(formData)}}
               type="button"
@@ -42,7 +58,8 @@ function PendingList() {
             >
              Upload
             </Link>
-          </div>
+          </div>:""
+          }
         </div>
         <div className="mt-6 flex flex-col">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -123,14 +140,18 @@ function PendingList() {
                       >
                         Site
                       </th>
-                      <th scope="col" className="relative px-4 py-3.5">
+                      {
+                        admin?"":
+                        <th scope="col" className="relative px-4 py-3.5">
                         <span className="sr-only">Edit</span>
                       </th>
+                      }
+                     
                     </tr>
                   </thead>
 
                   {
-                    List?.map((lists)=>{
+                    List?.map((lists,index)=>{
                       const date = new Date(lists.renewalDate);
 
                       const year = date.getFullYear();
@@ -140,9 +161,8 @@ function PendingList() {
                       const formattedDate = `${day}-${month}-${year}`;
                       return(
                     
-                  <tbody className="divide-y divide-gray-200 bg-white">
-                  
-                      <tr key='' className="divide-x divide-gray-200">
+                        <tbody key={index} className="divide-y divide-gray-200 bg-white">
+                        <tr key={index} className="divide-x divide-gray-200">
                         <td className="whitespace-nowrap px-4 py-4">
                           <div className="flex items-center">
                            
@@ -180,7 +200,8 @@ function PendingList() {
                           <div className="text-sm text-gray-900">{formattedDate}</div>
                           
                         </td>
-                      {
+                   
+                     {
                         lists?.status==='renewed'?
                         <td className="whitespace-nowrap px-4 py-4">
                           <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
@@ -192,7 +213,7 @@ function PendingList() {
                           {lists?.status}
                         </span>
                       </td>
-                      }
+                  }
                         <td className="whitespace-nowrap px-12 py-4">
                           <div className="text-sm text-gray-900">{lists?.cleaner}</div>
                           
@@ -203,6 +224,7 @@ function PendingList() {
                         </td>
 
                         {
+                          admin?"":
                           lists.status==='renewed'?
                         <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
                           <button to={`/edit/${lists._id}`}   className=" text-gray-500" disabled >
@@ -230,18 +252,22 @@ function PendingList() {
         <div className="mt-4 w-full border-gray-300">
           <div className="mt-2 flex items-center justify-end">
             <div className="space-x-2">
-              <button
-                type="button"
-                className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-              >
-                &larr; Previous
-              </button>
-              <button
-                type="button"
-                className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-              >
-                Next &rarr;
-              </button>
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >
+              &larr; Previous
+            </button>
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >
+              Next &rarr;
+            </button>
             </div>
           </div>
         </div>

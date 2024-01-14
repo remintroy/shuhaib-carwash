@@ -23,18 +23,22 @@ export async function pendinglist (data){
     })
 }
 
-export async function getPendingList(){
-    console.log('caalinngg');
-return new Promise((resolve,reject)=>{
-    adminApi.get('/getPendingList').then((data)=>{
-        resolve(data)
-    }).catch((error)=>{
-        console.log(error,'namma error');
-        reject(error)
-    })
-})
+export async function getPendingList(currentPage, pageSize) {
+  console.log('calling');
+  try {
+    const response = await adminApi.get('/getPendingList', {
+      params: {
+        page: currentPage,
+        pageSize: pageSize,
+      },
+    
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error in getPendingList:', error);
+    throw error;
+  }
 }
-
 export async function editList (data){
     console.log(data,'axios data...');
     return new Promise((resolve,reject)=>{
@@ -108,3 +112,74 @@ export async function exportList(data){
         }) 
     })
 }
+//admin Login
+
+export async function adminLogin(data){
+    console.log(data,'axios data');
+    return new Promise((resolve,reject)=>{
+      adminApi.post('/loginAdmin',data).then((resoponse)=>{
+        console.log(resoponse,'...');
+        if(resoponse){
+            resolve(resoponse)
+        }
+      }).catch((error)=>{
+        reject(error)
+      })
+    })
+}
+
+//add employee
+
+export async function addEmp(data){
+    return new Promise((resolve,reject)=>{
+        adminApi.post('/addEmployees',data).then((response)=>{
+          resolve(response)
+        }).catch((error)=>{
+            reject(error)
+        })
+    })
+}
+//getting employees
+export async function getEmployees (){
+    return new Promise((resolve,reject)=>{
+        adminApi.get('/getEmployees').then((data)=>{
+            if(data){
+                resolve(data)
+            }
+        }).catch((error)=>{
+            reject(error)
+        })
+    })
+}
+//employee Login 
+
+export async function employeeLogin(data){
+    return new Promise((resolve,reject)=>{
+adminApi.post('/empLogin',data).then((res)=>{
+    if(res){
+        resolve(res)
+    }
+}).catch((error)=>{
+    reject(error)
+})
+    })
+}
+//getEmplPendingList
+
+export async function getEmplPendingList(currentPage, pageSize,data) {
+    console.log('calling');
+    try {
+      const response = await adminApi.get('/getEmplPendingList', {
+        params: {
+          page: currentPage,
+          pageSize: pageSize,
+          data:data
+        },
+      
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error in getPendingList:', error);
+      throw error;
+    }
+  }

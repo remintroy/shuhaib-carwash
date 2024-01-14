@@ -10,7 +10,12 @@ const {addPendingList,getAllLists
     getSingleData,
     getallRenewedList,
     downloadReneiwedData,
-    exportFormData
+    exportFormData,
+    loginAdmin,
+    addEmployee,
+    getEmployeesList,
+    loginEmp,
+    getEmpPendList
 } = require('../controller/adminController')
 
 router.post('/pendingList',addPendingList)
@@ -20,4 +25,9 @@ router.post('/editList',editList)
 router.get('/renewedList',getallRenewedList)
 router.get('/downloadData',downloadReneiwedData)
 router.post('/exportList',upload.single('excelFile'),exportFormData)
+router.post('/loginAdmin',loginAdmin)
+router.post('/addEmployees',addEmployee)
+router.get('/getEmployees',getEmployeesList)
+router.post('/empLogin',loginEmp)
+router.get('/getEmplPendingList',getEmpPendList)
 module.exports= router
