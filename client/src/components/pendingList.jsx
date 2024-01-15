@@ -223,7 +223,7 @@ console.log(List,'namma lists front endd');
                           
                         </td>
 
-                        {
+                        {/* {
                           admin?"":
                           lists.status==='renewed'?
                         <td className="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
@@ -236,7 +236,7 @@ console.log(List,'namma lists front endd');
                           Edit
                         </Link>
                       </td>
-                        }
+                        } */}
                       </tr>
                     
                   </tbody>
