@@ -13,11 +13,9 @@ const app = express()
 const adminRoutes = require('./routes/admin')
 
 app.use(cors({
-
     credentials: true,
-    methods: ["GET", "POST"],
-    origin: true,
-    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "OPTIONS"],
+    origin: ["http://localhost:5173", "https://triecleaningg.com", "http://triecleaningg.com],
 }))
 
 app.use(cookieParser())
