@@ -1,22 +1,16 @@
-name: deploy-client
+name: deploy-server
 on:
   push:
     branches:
       - main
     paths:
-      - "client/**"
+      - "server/**"
 jobs:
   build_and_delploy:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v3
-
-      - name: Building files
-        run: |
-          cd client
-          npm i
-          npm run build
 
       - name: Generate SSH key
         run: |
@@ -25,10 +19,10 @@ jobs:
 
       - name: Copy build files
         run: |
-          scp -o StrictHostKeyChecking=accept-new -i "~/secret.pem" -r client/dist/** ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:client
+          scp -o StrictHostKeyChecking=accept-new -i "~/secret.pem" -r server/** ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:server
 
       - name: SSH into EC2 instance and restarting server
         run: |
           ssh -i "~/secret.pem" ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
-          pm2 restart client
+          pm2 restart server
           '
