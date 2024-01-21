@@ -9,7 +9,15 @@ function AdminLogin() {
     //validation
 const validate = values => {
     let errors = {}
-  
+  if(!values.name){
+    errors.email = toast.error('email is required')
+  }
+  else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)){
+    errors.email = toast.error("invalid email address")
+}
+else if(!values.password){
+  errors.password = toast.error('password is required')
+}
     return errors
   }
   const formik = useFormik({
