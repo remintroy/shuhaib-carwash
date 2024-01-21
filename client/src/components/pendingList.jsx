@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getPendingList, exportList } from '../helpers/adminHelpers';
 
 function PendingList() {
+  const navigate = useNavigate()
   const admin = sessionStorage.getItem('admin');
+  if (!admin){
+    navigate('/adminLogin')
+  }
   const [file, setFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);

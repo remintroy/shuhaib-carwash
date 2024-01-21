@@ -18,6 +18,9 @@ const renewedListSchema = mongoose.Schema({
     amountRecieved: {
         type: String
     },
+    authCode:{
+        type:String
+    },
     balance: {
         type: String
     },
