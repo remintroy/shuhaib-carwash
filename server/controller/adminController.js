@@ -131,8 +131,9 @@ exports.getallRenewedList= async(req,res)=>{
     
     try {
         const allData = await RenewedList.find({})
-       console.log(allData,'booodyyyyyyyyy');
+        console.log(allData,'kjflksjdflksd');
         if(allData){
+            console.log('dkdj');
             res.status(200).send({data:allData})
         }
     } catch (error) {
