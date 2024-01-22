@@ -24,5 +24,6 @@ jobs:
       - name: SSH into EC2 instance and restarting server
         run: |
           ssh -i "~/secret.pem" ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
+          cd ~/server && npm i --force
           pm2 restart server
           '
