@@ -7,9 +7,11 @@ const employeeSchema=mongoose.Schema({
     },
     site:{
         type:String,
-        required:true,
+        // required:true,
      
     },
+    
+
     password:{
         type:String,
         required:true

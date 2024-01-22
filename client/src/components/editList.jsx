@@ -12,7 +12,6 @@ function EditList() {
   const {id}=useParams()
 
 const[singleData,setSingleData]= useState([])
-
 const [contractNo,setcontractNo]=useState('')
 const [cleaner,setCleaner]= useState('')
 const[VAT,setVat]= useState('')
@@ -20,21 +19,22 @@ const [site,setSite] = useState('')
 const [plateNo,setPlateNo]= useState('')
 const [renewalDate,setRenewalDate]= useState('')
 
-
+console.log(renewalDate,'renawaldate');
 
 const [selectedValue, setSelectedValue] = useState('cash');
 const date = new Date(singleData?.renewalDate);
 const year = date.getFullYear();
 const month = (date.getMonth() + 1).toString().padStart(2, '0');
 const day = date.getDate().toString().padStart(2, '0');
-const formattedDate = `${day}-${month}-${year}`;
+const formattedDate = `${day}-${month}-${year}`
 
 useEffect(()=>{
   
 getListbyId(id).then((singleData=>{
   
 
-  formik.setValues({
+  
+formik.setValues({
     contractNo:singleData.data.data.contractNo,
     cleaner:singleData.data.data.cleaner,
     VAT:singleData.data.data.VAT,
@@ -72,6 +72,7 @@ const Change = (event) => {
   };
   const validate = values => {
     const errors = {}
+
   }
 const formik = useFormik({
 initialValues:{
@@ -110,7 +111,7 @@ console.log(datas);
 })
   return (
     <div>
-         <section className="bg-gray-100">
+         {/* <section className="bg-gray-100">
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div >
        
@@ -161,10 +162,15 @@ console.log(datas);
               </div>
   
               <div>
+                {
+                  console.log(renewalDate,'fkfjkjf')
+                }
                 <label className="sr-only" htmlFor="phone">Renewal Date </label>
                 <input
                   name='renewalDate'
                   value={renewalDate}
+                 
+                  
                  
                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
                   placeholder=" Renewal Date"
@@ -304,7 +310,7 @@ console.log(datas);
         </div>
       </div>
     </div>
-  </section>
+  </section> */}
     </div>
   )
 }

@@ -65,6 +65,7 @@ export async function getListbyId (id){
 export async function getrenewedList(){
 return new Promise((resolve,reject)=>{
     adminApi.get('/renewedList').then((data)=>{
+        console.log(data,'jhghjgjg');
         resolve(data)
     }).catch((error)=>{
         console.log(error);

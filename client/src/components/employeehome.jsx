@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getEmplPendingList, exportList } from '../helpers/adminHelpers';
 
 function EmployeeHome() {
+  const navigate = useNavigate()
     const emp =sessionStorage.getItem('emp');
+    if(!emp){
+         navigate('/emplogin')
+    }
     const [file, setFile] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -39,7 +43,11 @@ function EmployeeHome() {
       }
     };
   return (
+   
     <section className="mx-auto w-full max-w-7xl px-4 py-4">
+   
+      
+   
     <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
       <div>
         <h2 className="text-lg font-semibold">      Pending List</h2>
@@ -259,7 +267,9 @@ function EmployeeHome() {
         </div>
       </div>
     </div>
+           
   </section>
+
   )
 }
 
