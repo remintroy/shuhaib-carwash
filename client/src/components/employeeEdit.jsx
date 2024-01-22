@@ -9,11 +9,16 @@ import {editList,getListbyId} from '../helpers/adminHelpers'
 
 
 function EmployeeEdit() {
+  const today = new Date().toISOString().split('T')[0];
     const navigate= useNavigate()
+    const emp =sessionStorage.getItem('emp');
+    if(!emp){
+         navigate('/emplogin')
+    }
     const {id}=useParams()
   
   const[singleData,setSingleData]= useState([])
-  
+  console.log(singleData,'namma data');
   const [contractNo,setcontractNo]=useState('')
   const [cleaner,setCleaner]= useState('')
   const[VAT,setVat]= useState('')
@@ -29,7 +34,7 @@ function EmployeeEdit() {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   const formattedDate = `${day}-${month}-${year}`;
-  
+  console.log(formattedDate,'ffff');
   useEffect(()=>{
     
   getListbyId(id).then((singleData=>{
@@ -73,6 +78,9 @@ function EmployeeEdit() {
     };
     const validate = values => {
       const errors = {}
+    
+       
+     
     }
   const formik = useFormik({
   initialValues:{
@@ -165,7 +173,7 @@ function EmployeeEdit() {
                 <label className="sr-only" htmlFor="phone">Renewal Date </label>
                 <input
                   name='renewalDate'
-                  value={renewalDate}
+                  value={formattedDate}
                  
                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
                   placeholder=" Renewal Date"
@@ -174,20 +182,18 @@ function EmployeeEdit() {
                 />
               </div>
               <div>
-                <label className="sr-only" htmlFor="phone">New Date </label>
-                <input
-                name='newDate'
-                 onChange={formik.handleChange}
-                 onBlur={formik.handleBlur}
-                 value={formik.values.newDate}
-          
-                 
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
-                  placeholder=" New Date"
-                  type="date"
-                 
-                />
-              </div>
+      <label className="sr-only" htmlFor="phone">New Date </label>
+      <input
+        name='newDate'
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.newDate}
+        className="w-full rounded-lg border-gray-200 p-3 text-sm"
+        placeholder=" New Date"
+        type="date"
+        min={today}  // Set the min attribute to today's date
+      />
+    </div>
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>

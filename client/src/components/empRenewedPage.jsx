@@ -53,6 +53,12 @@ function EmpRenewedPage() {
                   >
                     Plate No
                   </th>
+                  <th
+                    scope="col"
+                    className="px-12 py-3.5 text-left text-sm font-normal text-gray-500"
+                  >
+                  Auth Code
+                  </th>
 
                   <th
                     scope="col"
@@ -126,6 +132,9 @@ function EmpRenewedPage() {
                     </td>
                     <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
                       {data.plateNo}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
+                      {data.authCode}
                     </td>
                     <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
                       {formattedDate}

@@ -11,6 +11,13 @@ function EmployeeLogin() {
     const validate = values => {
         let errors = {}
       
+        if(!values.username){
+          errors.username = toast.error('name is required')
+        }
+        
+        else if(!values.password){
+          errors.password = toast.error('password is required')
+        }
         return errors
       }
       const formik = useFormik({

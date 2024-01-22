@@ -72,7 +72,7 @@ exports.editList = async(req,res)=>{
     try {
        const {id}=req.body
       console.log(req.body,'namma body');
-       const {Payment,contractNo,cleaner,VAT,site,plateNo,renewalDate,newDate,balance,amountRecieved}= req.body.values
+       const {Payment,contractNo,cleaner,VAT,site,plateNo,renewalDate,newDate,balance,amountRecieved,authCode}= req.body.values
        const dateString = newDate;
 const updatedDate = new Date(dateString);
         const updateList = await PendingList.updateOne({_id:id},
@@ -93,7 +93,8 @@ const updatedDate = new Date(dateString);
                 cleaner,
                 amountRecieved,
                 balance,
-                paymentMethod:Payment
+                paymentMethod:Payment,
+                 authCode
             })
             renewedList.save().then((result)=>{
                
@@ -127,10 +128,12 @@ if(singlData){
 }
 
 exports.getallRenewedList= async(req,res)=>{
+    
     try {
         const allData = await RenewedList.find({})
-       
+        console.log(allData,'kjflksjdflksd');
         if(allData){
+            console.log('dkdj');
             res.status(200).send({data:allData})
         }
     } catch (error) {

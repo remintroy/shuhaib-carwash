@@ -6,9 +6,25 @@ import toast,{Toaster} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
 function AddEmployee() {
+  
   const navigate =useNavigate()
+  
     const validate = values => {
         const errors = {}
+      if(!values.name){
+        errors.name = toast.error('name is required')
+      }
+      else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.name)){
+        errors.name = toast.error("invalid name address")
+    }
+  
+      else if(!values.site){
+        errors.site =toast.error('site is required')
+      }
+      else if(!values.password){
+        errors.password = toast.error('password is required')
+      }
+      return errors
       }
     const formik = useFormik({
         initialValues: {
