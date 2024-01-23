@@ -61,7 +61,12 @@ function RenewedList() {
                   >
                     Renewal Date
                   </th>
-
+                  <th
+                    scope="col"
+                    className="px-4 py-3.5 text-left text-sm font-normal text-gray-500"
+                  >
+                    Auth Code
+                  </th>
                   <th
                     scope="col"
                     className="px-4 py-3.5 text-left text-sm font-normal text-gray-500"
@@ -130,6 +135,9 @@ function RenewedList() {
                     </td>
                     <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
                       {formattedDate}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
+                      {data.authCode}
                     </td>
                     <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
                       {data.amount}

@@ -128,9 +128,13 @@ if(singlData){
 }
 
 exports.getallRenewedList= async(req,res)=>{
-    
+    console.log('dkkdkd');
     try {
         const allData = await RenewedList.find({})
+        process.on('unhandledRejection', (reason, promise) => {
+            console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+            // Handle the rejection or terminate the process if necessary
+          });
         console.log(allData,'kjflksjdflksd');
         if(allData){
             console.log('dkdj');
@@ -159,6 +163,8 @@ async function exportToExcelAndSendResponse(data, res) {
       { header: 'Contract No', key: 'contractNo', width: 15 },
       { header: 'Plate No ', key: 'plateNo', width: 15 },
       { header: 'Renewal Date', key: 'RenewalDate', width: 15 },
+      { header: 'Auth Code', key: 'AuthCode', width: 15 },
+
       { header: 'Amount', key: 'amount', width: 15 },
       { header: 'Amount Recieved', key: 'amountRecieved', width: 15 },
       { header: 'Balance', key: 'balance', width: 15 },
@@ -175,6 +181,7 @@ async function exportToExcelAndSendResponse(data, res) {
         contractNo: item.contractNo,
         plateNo: item.plateNo,
         RenewalDate: item.newDate,
+        AuthCode:item.authCode,
         amount: item.amount,
         amountRecieved: item.amountRecieved,
         balance: item.balance,
@@ -360,6 +367,7 @@ exports.loginAdmin=async(req,res)=>{
  }
 
  exports.getEmpPendList =async(req,res)=>{
+    console.log('kjflfjldk');
     console.log(req.query,'queryy...');
     try {
         const currentPage = req.query.page || 1;
