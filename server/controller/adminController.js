@@ -164,6 +164,8 @@ async function exportToExcelAndSendResponse(data, res) {
     const worksheet = workbook.addWorksheet('Sheet 1');
     worksheet.columns = [
       { header: 'Contract No', key: 'contractNo', width: 15 },
+      { header: 'Serial No', key: 'serialNo', width: 15 },
+
       { header: 'Plate No ', key: 'plateNo', width: 15 },
       { header: 'Renewal Date', key: 'RenewalDate', width: 15 },
       { header: 'Auth Code', key: 'AuthCode', width: 15 },
@@ -182,6 +184,7 @@ async function exportToExcelAndSendResponse(data, res) {
         console.log(item,'ietmss');
       worksheet.addRow({
         contractNo: item.contractNo,
+        serialNo:item.serialNo,
         plateNo: item.plateNo,
         RenewalDate: item.newDate,
         AuthCode:item.authCode,
