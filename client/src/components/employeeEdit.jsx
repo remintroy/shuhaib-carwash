@@ -85,6 +85,7 @@ function EmployeeEdit() {
   const formik = useFormik({
   initialValues:{
   contractNo,
+  serialNo:'',
   VAT,
   renewalDate,
   amountRecieved:'',
@@ -128,26 +129,44 @@ function EmployeeEdit() {
           <Toaster position='top-center' reverseOrder={false} ></Toaster> 
           <form onSubmit={formik.handleSubmit} className="space-y-4">
             <div>
-              <label className="sr-only" htmlFor="name">Contract No</label>
-              <input
-               name='contractNo'
-               value={contractNo}
-               {...formik.getFieldProps('contractNo')}
-                className="w-full rounded-lg border-gray-200 p-3 text-sm"
-                placeholder="Contract No"
-                type="text"
-                id="name"
-              />
+             
+            <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Contract No</label>
+            <input
+  name='contractNo'
+  value={contractNo}
+  {...formik.getFieldProps('contractNo')}
+  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+  placeholder="Contract No"
+  type="text"
+  id="name"
+/>
             </div>
-  
+            
+            <div>
+             
+             <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Serial NO</label>
+             <input
+   name='serialNo'
+   onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.serialNo}
+   className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+   placeholder="serialNo"
+   type="text"
+   id="serialNo"
+ />
+             </div>
+             
+   
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="sr-only" htmlFor="email">site</label>
+              <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Site</label>
                 <input
                   name='site'
                   value={site}
                   
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   placeholder="site"
                   type="text"
                 />
@@ -157,12 +176,13 @@ function EmployeeEdit() {
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="sr-only" htmlFor="email">Plate no</label>
+              <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Plate No</label>
                 <input
                   name='plateNo'
                   value={plateNo}
                 
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   placeholder="Plate no"
                   type="text"
                  
@@ -170,25 +190,27 @@ function EmployeeEdit() {
               </div>
   
               <div>
-                <label className="sr-only" htmlFor="phone">Renewal Date </label>
+              <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Renewal Date</label>
                 <input
                   name='renewalDate'
                   value={formattedDate}
                  
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   placeholder=" Renewal Date"
                   type="text"
                   id="phone"
                 />
               </div>
               <div>
-      <label className="sr-only" htmlFor="phone">New Date </label>
+              <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">New Date</label>
       <input
         name='newDate'
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.newDate}
-        className="w-full rounded-lg border-gray-200 p-3 text-sm"
+        className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
         placeholder=" New Date"
         type="date"
         min={today}  // Set the min attribute to today's date
@@ -197,7 +219,7 @@ function EmployeeEdit() {
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-                  <label className="sr-only">Payment Methord</label>
+            <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Payment</label>
                   <select
                     onChange={(e) => {
                       Change(e);
@@ -206,7 +228,8 @@ function EmployeeEdit() {
                   
                     name="Payment"
                     type="text"
-                    className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                    className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   >
                     <option value="select one">select one</option>
 
@@ -218,13 +241,14 @@ function EmployeeEdit() {
   {
     selectedValue==='card'?
               <div>
-                <label className="sr-only" htmlFor="phone"> Auth Code</label>
+                <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Auth Code</label>
                 <input
                   name='authCode' 
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.authCode}
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   placeholder="Auth Code "
                   type="text"
                   id="phone"
@@ -236,7 +260,7 @@ function EmployeeEdit() {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-                    <label className="sr-only">Amount Received</label>
+            <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Amount Recieved</label>
                     <input
                       name="amountRecieved"
                       onChange={(e) => {
@@ -246,32 +270,34 @@ function EmployeeEdit() {
                       }}
                       onBlur={formik.handleBlur}
                       value={formik.values.amountRecieved}
-                      className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                      className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                       placeholder="Amount Received"
                       type="text"
                       id="amount"
                     />
                   </div>
+                  <div>
+                  <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Balance</label>
+  <input
+    name="balance"
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    value={formik.values.balance}
+    className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+    placeholder="Balance"
+    type="text"
+    id="balance"
+  />
+</div>
               <div>
-                    <label className="sr-only">Balance</label>
-                    <input
-                      name="balance"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.balance}
-                      className="w-full rounded-lg border-gray-200 p-3 text-sm"
-                      placeholder="Balance"
-                      type="text"
-                      id="balance"
-                    />
-                  </div>
-              <div>
-                <label className="sr-only" htmlFor="email">Amount </label>
+              <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Amount</label>
                 <input
                   name='amount'
                   value={VAT}
                  
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   placeholder="Amount"
                   type="text"
                   id="email"
@@ -279,12 +305,13 @@ function EmployeeEdit() {
               </div>
   
               <div>
-                <label className="sr-only" htmlFor="phone"> Cleaner Name</label>
+              <label htmlFor="balance" className="block text-gray-700 font-bold mb-2">Cleaner</label>
                 <input
                   name='cleaner'
                   value={cleaner}
                   onChange={(e)=>{setCleaner(e.target.value)}}
-                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  className="w-full rounded-lg border border-gray-500 p-3 text-sm"
+
                   placeholder="Cleaner Name "
                   type="text"
                   id="phone"

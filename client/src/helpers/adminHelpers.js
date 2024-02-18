@@ -5,6 +5,7 @@ axios.defaults.withCredentials = true
 
 
 const URL = 'https://server.triecleaningg.com'
+// const URL =' http://localhost:4000'
 
 const adminApi = axios.create({
     baseURL:URL

@@ -50,6 +50,12 @@ function RenewedList() {
                   </th>
                   <th
                     scope="col"
+                    className="px-4 py-3.5 text-left text-sm font-normal text-gray-500"
+                  >
+                    <span>Serial No</span>
+                  </th>
+                  <th
+                    scope="col"
                     className="px-12 py-3.5 text-left text-sm font-normal text-gray-500"
                   >
                     Plate No
@@ -129,6 +135,9 @@ function RenewedList() {
                     <td className="whitespace-nowrap px-12 py-4">
                       <div className="text-sm text-gray-900">{data.contractNo}</div>
                     
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
+                      {data.serialNo}
                     </td>
                     <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-500">
                       {data.plateNo}

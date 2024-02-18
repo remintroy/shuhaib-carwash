@@ -68,11 +68,13 @@ exports.getAllLists = async (req, res) => {
       res.send(error.message);
     }
   };
+
 exports.editList = async(req,res)=>{
     try {
        const {id}=req.body
       console.log(req.body,'namma body');
-       const {Payment,contractNo,cleaner,VAT,site,plateNo,renewalDate,newDate,balance,amountRecieved,authCode}= req.body.values
+       const {Payment,contractNo,cleaner,VAT,site,plateNo,renewalDate,newDate,balance,amountRecieved,authCode,serialNo}= req.body.values
+    
        const dateString = newDate;
 const updatedDate = new Date(dateString);
         const updateList = await PendingList.updateOne({_id:id},
@@ -87,6 +89,7 @@ const updatedDate = new Date(dateString);
             const renewedList = new RenewedList({
                 contractNo,
                 plateNo,
+                serialNo,
                 amount:VAT,
                 newDate:updatedDate,            
                 site,
