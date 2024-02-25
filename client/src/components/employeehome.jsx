@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getEmplPendingList, exportList } from '../helpers/adminHelpers';
+import { getEmplPendingList, exportList,search } from '../helpers/adminHelpers';
 
 function EmployeeHome() {
   const navigate = useNavigate()
@@ -13,11 +13,13 @@ function EmployeeHome() {
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [List, setList] = useState([]);
+    const [searchTerm, setSearchTerm] = useState([]);
+
   
     const handleFileChange = (e) => {
       setFile(e.target.files[0]);
     };
-  
+ 
     const formData = new FormData();
     formData.append('excelFile', file);
   
@@ -33,15 +35,25 @@ function EmployeeHome() {
     };
   console.log(List,'namma lists front endd');
     useEffect(() => {
-      fetchPaginatedData();
-    }, [currentPage, pageSize]);
-  
+      if(searchTerm==''){
+       
+        fetchPaginatedData();
+      }
+    }, [currentPage, pageSize,searchTerm]);
+    
     const handlePageChange = (newPage) => {
       console.log('next',newPage);
       if (newPage >= 1 && newPage <= totalPages) {
         setCurrentPage(newPage);
       }
     };
+   
+    const handleSearch =async()=>{
+      const searchData =await search(searchTerm )
+      console.log(searchData,'dkfj');
+      setList(searchData.data)
+
+    }
   return (
    
     <section className="mx-auto w-full max-w-7xl px-4 py-4">
@@ -55,7 +67,23 @@ function EmployeeHome() {
    
         </p>
       </div>
-     
+      {/* filter  */}
+      <div className="flex items-center">
+  <input
+    type="text"
+   
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Search by Contract No"
+    className="border border-gray-300 rounded-lg px-3 py-1 mr-2"
+  />
+  <button
+    onClick={handleSearch}
+    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+  >
+    Search
+  </button>
+</div>
+
     </div>
     <div className="mt-6 flex flex-col">
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

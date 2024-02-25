@@ -175,6 +175,7 @@ export async function getEmplPendingList(currentPage, pageSize,data) {
         params: {
           page: currentPage,
           pageSize: pageSize,
+       
           data:data
         },
       
@@ -185,3 +186,17 @@ export async function getEmplPendingList(currentPage, pageSize,data) {
       throw error;
     }
   }
+//search
+
+export async function search(data){
+   return new Promise((resolve,reject)=>{
+    adminApi.post('/searchTerm',data).then((response)=>{
+        if(response){
+resolve(response)
+        }
+    }).catch((error)=>{
+        reject(error)
+    })
+   })
+
+}

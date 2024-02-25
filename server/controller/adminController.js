@@ -400,3 +400,20 @@ exports.loginAdmin=async(req,res)=>{
         
     }
  }
+ //seerch data
+ exports.getSearchData =async(req,res)=>{
+    const data = req.body
+   
+    const contact = Object.keys(data)[0];
+console.log(contact,'contact');
+    try {
+        console.log(contact,'backend');
+    const Data =await PendingList.find({contractNo:contact})
+    console.log(Data,'dddk');
+    if(Data){
+        res.status(200).send(Data)
+    }
+    } catch (error) {
+        res.send(error)
+    }
+ }
