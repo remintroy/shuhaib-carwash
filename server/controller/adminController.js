@@ -68,11 +68,13 @@ exports.getAllLists = async (req, res) => {
       res.send(error.message);
     }
   };
+
 exports.editList = async(req,res)=>{
     try {
        const {id}=req.body
       console.log(req.body,'namma body');
-       const {Payment,contractNo,cleaner,VAT,site,plateNo,renewalDate,newDate,balance,amountRecieved,authCode}= req.body.values
+       const {Payment,contractNo,cleaner,VAT,site,plateNo,renewalDate,newDate,balance,amountRecieved,authCode,serialNo}= req.body.values
+    
        const dateString = newDate;
 const updatedDate = new Date(dateString);
         const updateList = await PendingList.updateOne({_id:id},
@@ -87,6 +89,7 @@ const updatedDate = new Date(dateString);
             const renewedList = new RenewedList({
                 contractNo,
                 plateNo,
+                serialNo,
                 amount:VAT,
                 newDate:updatedDate,            
                 site,
@@ -128,9 +131,13 @@ if(singlData){
 }
 
 exports.getallRenewedList= async(req,res)=>{
-    
+    console.log('dkkdkd');
     try {
         const allData = await RenewedList.find({})
+        process.on('unhandledRejection', (reason, promise) => {
+            console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+            // Handle the rejection or terminate the process if necessary
+          });
         console.log(allData,'kjflksjdflksd');
         if(allData){
             console.log('dkdj');
@@ -157,8 +164,12 @@ async function exportToExcelAndSendResponse(data, res) {
     const worksheet = workbook.addWorksheet('Sheet 1');
     worksheet.columns = [
       { header: 'Contract No', key: 'contractNo', width: 15 },
+      { header: 'Serial No', key: 'serialNo', width: 15 },
+
       { header: 'Plate No ', key: 'plateNo', width: 15 },
       { header: 'Renewal Date', key: 'RenewalDate', width: 15 },
+      { header: 'Auth Code', key: 'AuthCode', width: 15 },
+
       { header: 'Amount', key: 'amount', width: 15 },
       { header: 'Amount Recieved', key: 'amountRecieved', width: 15 },
       { header: 'Balance', key: 'balance', width: 15 },
@@ -173,8 +184,10 @@ async function exportToExcelAndSendResponse(data, res) {
         console.log(item,'ietmss');
       worksheet.addRow({
         contractNo: item.contractNo,
+        serialNo:item.serialNo,
         plateNo: item.plateNo,
         RenewalDate: item.newDate,
+        AuthCode:item.authCode,
         amount: item.amount,
         amountRecieved: item.amountRecieved,
         balance: item.balance,
@@ -360,6 +373,7 @@ exports.loginAdmin=async(req,res)=>{
  }
 
  exports.getEmpPendList =async(req,res)=>{
+    console.log('kjflfjldk');
     console.log(req.query,'queryy...');
     try {
         const currentPage = req.query.page || 1;
@@ -384,5 +398,22 @@ exports.loginAdmin=async(req,res)=>{
         }
     } catch (error) {
         
+    }
+ }
+ //seerch data
+ exports.getSearchData =async(req,res)=>{
+    const data = req.body
+   
+    const contact = Object.keys(data)[0];
+console.log(contact,'contact');
+    try {
+        console.log(contact,'backend');
+    const Data =await PendingList.find({contractNo:contact})
+    console.log(Data,'dddk');
+    if(Data){
+        res.status(200).send(Data)
+    }
+    } catch (error) {
+        res.send(error)
     }
  }

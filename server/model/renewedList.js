@@ -6,9 +6,14 @@ const renewedListSchema = mongoose.Schema({
         required: true,
 
     },
+
     plateNo: {
         type: String
     },
+    serialNo: {
+        type: String
+    },
+    
     newDate: {
         type: Date
     },
