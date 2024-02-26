@@ -1,0 +1,29 @@
+name: deploy-server
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "server/**"
+jobs:
+  build_and_delploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: Generate SSH key
+        run: |
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/secret.pem
+          chmod 600 ~/secret.pem
+
+      - name: Copy build files
+        run: |
+          scp -o StrictHostKeyChecking=accept-new -i "~/secret.pem" -r server/** ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:server
+
+      - name: SSH into EC2 instance and restarting server
+        run: |
+          ssh -i "~/secret.pem" ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
+          cd ~/server && npm i --force
+          pm2 restart server
+          '
