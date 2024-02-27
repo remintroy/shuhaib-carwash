@@ -68,7 +68,7 @@ function EmployeeHome() {
         </p>
       </div>
       {/* filter  */}
-      <div className="flex items-center">
+      {/* <div className="flex items-center">
   <input
     type="text"
    
@@ -82,7 +82,7 @@ function EmployeeHome() {
   >
     Search
   </button>
-</div>
+</div> */}
 
     </div>
     <div className="mt-6 flex flex-col">
