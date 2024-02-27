@@ -35,11 +35,11 @@ function EmployeeHome() {
     };
   console.log(List,'namma lists front endd');
     useEffect(() => {
-      if(searchTerm==''){
+      // if(searchTerm==''){
        
-        fetchPaginatedData();
-      }
-    }, [currentPage, pageSize,searchTerm]);
+      // }
+      fetchPaginatedData();
+    }, [currentPage, pageSize]);
     
     const handlePageChange = (newPage) => {
       console.log('next',newPage);
