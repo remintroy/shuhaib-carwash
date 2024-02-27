@@ -403,9 +403,9 @@ exports.loginAdmin=async(req,res)=>{
  //seerch data
  exports.getSearchData =async(req,res)=>{
     const data = req.body
-   
+  console.log('changedd...');
     const contact = Object.keys(data)[0];
-console.log(contact,'contact');
+
     try {
         console.log(contact,'backend');
     const Data =await PendingList.find({contractNo:contact})

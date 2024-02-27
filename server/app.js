@@ -7,7 +7,7 @@ const express = require("express");
 const app = express();
 
 const adminRoutes = require("./routes/admin");
-
+console.log('changinggg...');
 app.use(
   cors({
     credentials: true,

@@ -35,11 +35,11 @@ function EmployeeHome() {
     };
   console.log(List,'namma lists front endd');
     useEffect(() => {
-      // if(searchTerm==''){
+      if(searchTerm==''){
        
-      // }
-      fetchPaginatedData();
-    }, [currentPage, pageSize]);
+        fetchPaginatedData();
+      }
+    }, [currentPage, pageSize,searchTerm]);
     
     const handlePageChange = (newPage) => {
       console.log('next',newPage);
@@ -68,7 +68,7 @@ function EmployeeHome() {
         </p>
       </div>
       {/* filter  */}
-      {/* <div className="flex items-center">
+      <div className="flex items-center">
   <input
     type="text"
    
@@ -82,7 +82,7 @@ function EmployeeHome() {
   >
     Search
   </button>
-</div> */}
+</div>
 
     </div>
     <div className="mt-6 flex flex-col">
