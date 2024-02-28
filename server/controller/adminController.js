@@ -373,7 +373,6 @@ exports.loginAdmin=async(req,res)=>{
  }
 
  exports.getEmpPendList =async(req,res)=>{
-    console.log('kjflfjldk');
     console.log(req.query,'queryy...');
     try {
         const currentPage = req.query.page || 1;
@@ -387,8 +386,9 @@ exports.loginAdmin=async(req,res)=>{
    
     console.log(empSite,'site ');
         const allPendingList = await PendingList.find({site:empSite})
-          .skip(skipItems)
-          .limit(pageSize);
+        .skip(skipItems)
+        .limit(pageSize);
+        console.log(allPendingList,'dkpending lis');
         const totalItems = await PendingList.countDocuments({site:empSite});
     console.log(totalItems,'totalitems');
         if (allPendingList) {
