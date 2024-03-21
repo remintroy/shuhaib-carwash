@@ -5,7 +5,8 @@ const Admin = require('../model/admin')
 const Employee = require('../model/employee')
 const bcrypt = require('bcrypt')
 const userName =require('../config/adminDetail')
-const newPassword= require('../config/adminDetail')
+const newPassword= require('../config/adminDetail');
+const NewList = require('../model/newList');
 
 
 exports.addPendingList=async(req,res)=>{
@@ -45,7 +46,7 @@ addlist.save().then((result)=>{
 }
 const ITEMS_PER_PAGE = 10;
 exports.getAllLists = async (req, res) => {
-    console.log('calling', 'back');
+    console.log( req.query,'calling', 'back');
     try {
       const currentPage = req.query.page || 1;
       const pageSize = req.query.pageSize || ITEMS_PER_PAGE;
@@ -378,7 +379,7 @@ exports.loginAdmin=async(req,res)=>{
         const currentPage = req.query.page || 1;
         const pageSize = req.query.pageSize || ITEMS_PER_PAGE;
         const data = req.query.data
-        console.log(data,'..dataa');
+        console.log(req.query,'..dataa');
     console.log(currentPage,'..currnt');
         const skipItems = (currentPage - 1) * pageSize;
     const site = await Employee.find({name:data})
@@ -403,7 +404,7 @@ exports.loginAdmin=async(req,res)=>{
  //seerch data
  exports.getSearchData =async(req,res)=>{
     const data = req.body
-  console.log('changedd...');
+ 
     const contact = Object.keys(data)[0];
 
     try {
@@ -417,3 +418,108 @@ exports.loginAdmin=async(req,res)=>{
         res.send(error)
     }
  }
+ exports.addNewList=async(req,res)=>{
+  console.log(req.body,'namma body backend');
+  const {serialNo,name,mobile,building,plateNo,flat,lotnumber,paymentMethod,authcode,amount,
+    renewaldate,schedule,cleaner,date
+
+}=req.body
+    const newList = new  NewList(req.body)
+    newList.save().then((response)=>{
+      if(response){
+        console.log(response,'saved succesfully');
+          res.status(200).send({success:true})
+      }
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).send({ success: false })
+    })
+ }
+ //getting new List
+ exports.getNewListData =async (req,res)=>{
+try {
+    const data = await NewList.find({})
+    console.log(data,'new lsit data');
+    if(data){
+        res.status(200).send(data)
+    }
+} catch (error) {
+   res.send(error) 
+}
+ }
+ //download new List data
+ exports.downloadDataNewList = async (req,res)=>{
+    try {
+        const allData =await NewList.find({})
+        if(allData){
+            exportToExcelAndSendResponse(allData,res)
+        }
+    } catch (error) {
+        
+    }
+ }
+ async function exportToExcelAndSendResponse(data, res) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet 1');
+    worksheet.columns = [
+      { header: 'Serial No', key: 'serialNo', width: 15 },
+      { header: 'Name', key: 'name', width: 15 },
+
+      { header: 'Mobile ', key: 'mobile', width: 15 },
+      { header: 'Building', key: 'building', width: 15 },
+      { header: 'Plate No', key: 'PlateNo', width: 15 },
+
+      { header: 'Flat  ', key: 'flat', width: 15 },
+      { header: 'Lot Number', key: 'lotnumber', width: 15 },
+      { header: 'payment Method', key: 'paymentMethod', width: 15 },
+
+      { header: 'AuthCode', key: 'authcode', width: 15 },
+      { header: 'Amount ', key: 'amount', width: 15 },
+      { header: 'Renewal Date ', key: 'renewaldate', width: 15 },
+      { header: 'Schedule ', key: 'schedule', width: 16 },
+      { header: 'Cleaner ', key: 'cleaner', width: 17 },
+      { header: 'Site ', key: 'site', width: 17 },
+
+      { header: 'Date ', key: 'date', width: 18 },
+
+
+
+
+    ];
+  
+    data.forEach((item) => {
+        console.log(item,'ietmss');
+      worksheet.addRow({
+        serialNo: item.serialNo,
+        name:item.name,
+        mobile: item.mobile,
+        building: item.building,
+        PlateNo:item.plateNo,
+        flat: item.flat,
+        lotnumber: item.lotnumber,
+        paymentMethod: item.paymentMethod,
+
+        authcode: item.authCode,
+        amount: item.amount,
+        renewaldate : item.renewaldate,
+        schedule : item.schedule,
+        cleaner : item.cleaner,
+        site : item.site,
+        date : item.date,
+
+
+
+      });
+    });
+  
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=output.xlsx');
+  
+   await  workbook.xlsx.write(res);
+  
+   
+    res.end();
+    
+  
+    console.log('Excel file sent successfully');
+  }

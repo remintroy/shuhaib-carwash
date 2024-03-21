@@ -13,7 +13,14 @@ const menuItems = [
     name: 'Renewed List',
     href: '/empreniew',
   },
- 
+  {
+    name: 'Add New List',
+    href: '/newList',
+  },
+  {
+    name: 'New List',
+    href: '/showList',
+  },
 ]
 
 function EmpNav() {
