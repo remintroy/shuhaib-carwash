@@ -200,3 +200,55 @@ resolve(response)
    })
 
 }
+//new list
+export async function newList(data){
+    return new Promise((resolve,reject)=>{
+        adminApi.post('/newList',data).then((res)=>{
+        console.log(res,'sooo');
+            if(res){
+                resolve(res)
+            }
+        }).catch((error)=>{
+            reject(error)
+        })
+    })
+}
+//get new List
+export async function getnewList(){
+    return new Promise((resolve,reject)=>{
+        adminApi.get('/newListData').then((data)=>{
+            console.log(data,'axios data');
+            if(data){
+                resolve(data)
+            }
+        }).catch((error)=>{
+            reject(error)
+        })
+    })
+}
+//download new llist data
+export async function downloadNewListData(){
+    return new Promise((resolve,reject)=>{
+        adminApi.get('/downloadNewListData', { responseType: 'arraybuffer' }).then((data,response)=>{
+            console.log(data,'dlfjlkdj');
+            if(data){
+
+                const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                // Create a link element to trigger the download
+                const link = document.createElement('a');
+                
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'renewed_data.xlsx'; // Set the desired file name
+                link.click();
+              
+            }
+            else {
+                console.error('Failed to download data:', response.statusText);
+              }
+          
+        }).catch((error)=>{
+            reject(error)
+        })
+    })
+}

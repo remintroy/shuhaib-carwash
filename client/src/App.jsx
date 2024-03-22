@@ -14,6 +14,8 @@ import EmpLoginPage from './pages/empLoginPage'
 import EmpHomePage from './pages/empHomePage'
 import EmployeeEdit from './components/employeeEdit'
 import EmpRenewListPage from './pages/empRenewPage'
+import AddNewListPage from './pages/addNewListPage'
+import ShowNewListPage from './pages/shoNewListPage'
 //employee 
 
 
@@ -35,6 +37,10 @@ function App() {
   <Route path='/employeeedit/:id' element={<EmployeeEdit/>} />
 
   <Route path='/empreniew' element={<EmpRenewListPage/>} />
+  <Route path='/newList' element={<AddNewListPage/>} />
+  <Route path='/showList' element={<ShowNewListPage/>} />
+
+
 
 
 
